@@ -1,0 +1,7 @@
+.app {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--calc-page);
+}

@@ -1,0 +1,7 @@
+.keypad {
+  margin-top: 18px;
+  padding-bottom: 4px; /* espacio para el canto inferior de las teclas */
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px 10px;
+}

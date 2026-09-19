@@ -1,0 +1,93 @@
+.key {
+  height: 62px;
+  border: 0;
+  border-radius: 16px;
+  font: inherit;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--key-fg);
+  background: var(--key-bg);
+  /* el "canto" inferior da a cada tecla su relieve */
+  box-shadow: 0 4px 0 var(--key-edge);
+  cursor: pointer;
+  transition: transform 70ms ease-out, box-shadow 70ms ease-out;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Variantes: cada una solo define sus colores */
+.number {
+  --key-bg: var(--calc-number-bg);
+  --key-fg: var(--calc-number-fg);
+  --key-edge: var(--calc-number-edge);
+}
+
+.function {
+  --key-bg: var(--calc-function-bg);
+  --key-fg: var(--calc-function-fg);
+  --key-edge: var(--calc-function-edge);
+}
+
+.operator {
+  --key-bg: var(--calc-operator-bg);
+  --key-fg: var(--calc-operator-fg);
+  --key-edge: var(--calc-operator-edge);
+  font-size: 1.5rem;
+}
+
+.equals {
+  --key-bg: var(--calc-equals-bg);
+  --key-fg: var(--calc-equals-fg);
+  --key-edge: var(--calc-equals-edge);
+  font-size: 1.6rem;
+}
+
+.fullWidth {
+  grid-column: 1 / -1;
+}
+
+/* Operador elegido, a la espera del segundo número: la tecla se invierte */
+.pending {
+  --key-bg: var(--calc-number-bg);
+  --key-fg: var(--calc-operator-bg);
+  outline: 3px solid var(--calc-operator-bg);
+  outline-offset: -3px;
+}
+
+.key sup {
+  font-size: 0.62em;
+  line-height: 0;
+  margin-left: 1px;
+}
+
+.key svg {
+  display: block;
+  margin: 0 auto;
+}
+
+@media (hover: hover) {
+  .key:hover {
+    filter: brightness(0.96);
+  }
+}
+
+.key:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--key-edge);
+}
+
+.key:focus-visible {
+  outline: 3px solid var(--calc-screen);
+  outline-offset: 3px;
+}
+
+@media (max-width: 360px) {
+  .key {
+    height: 56px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .key {
+    transition: none;
+  }
+}
