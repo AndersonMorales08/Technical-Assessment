@@ -1,0 +1,194 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&display=swap");
+
+/* Paleta: verdes botánicos, del salvia claro al pino profundo */
+.calc-stage {
+  --fondo: #dbe8d8;
+  --carcasa: #eef5ec;
+  --carcasa-borde: #b7cfba;
+  --pino: #0d3b2c;
+  --pino-texto: #e6f4e8;
+  --pino-tenue: #93bfa6;
+  --error: #ffd2b5;
+
+  --num-bg: #ffffff;
+  --num-fg: #15382a;
+  --num-edge: #bcd3bf;
+
+  --fn-bg: #cfe6d3;
+  --fn-fg: #14503a;
+  --fn-edge: #a4c7ab;
+
+  --op-bg: #1f7a4d;
+  --op-fg: #ffffff;
+  --op-edge: #135a38;
+
+  --eq-bg: #17b26f;
+  --eq-fg: #052e1f;
+  --eq-edge: #0b8a52;
+
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--fondo);
+  font-family: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+
+.calc {
+  width: min(100%, 360px);
+  padding: 18px;
+  border-radius: 32px;
+  background: var(--carcasa);
+  box-shadow:
+    inset 0 1px 0 #ffffff,
+    0 3px 0 var(--carcasa-borde),
+    0 28px 48px -24px rgba(13, 59, 44, 0.45);
+}
+
+/* ---------- Pantalla ---------- */
+
+.calc__display {
+  height: 136px;
+  padding: 18px 20px 16px;
+  border-radius: 22px;
+  background: var(--pino);
+  color: var(--pino-texto);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  gap: 4px;
+  overflow: hidden;
+}
+
+.calc__expression {
+  max-width: 100%;
+  min-height: 1.5em;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--pino-tenue);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.calc__value {
+  max-width: 100%;
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+.calc__value--md { font-size: 2.3rem; }
+.calc__value--sm { font-size: 1.7rem; }
+.calc__value--xs { font-size: 1.3rem; }
+
+.calc__value--error {
+  font-size: 1.15rem;
+  line-height: 1.3;
+  letter-spacing: 0;
+  text-align: right;
+  white-space: normal;
+  color: var(--error);
+}
+
+/* ---------- Teclas ---------- */
+
+.calc__keys {
+  margin-top: 18px;
+  padding-bottom: 4px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px 10px;
+}
+
+.calc__key {
+  --key-bg: var(--num-bg);
+  --key-fg: var(--num-fg);
+  --key-edge: var(--num-edge);
+
+  height: 62px;
+  border: 0;
+  border-radius: 16px;
+  font: inherit;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--key-fg);
+  background: var(--key-bg);
+  /* el "canto" inferior da a cada tecla su relieve */
+  box-shadow: 0 4px 0 var(--key-edge);
+  cursor: pointer;
+  transition: transform 70ms ease-out, box-shadow 70ms ease-out;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.calc__key--fn {
+  --key-bg: var(--fn-bg);
+  --key-fg: var(--fn-fg);
+  --key-edge: var(--fn-edge);
+}
+
+.calc__key--op {
+  --key-bg: var(--op-bg);
+  --key-fg: var(--op-fg);
+  --key-edge: var(--op-edge);
+  font-size: 1.5rem;
+}
+
+.calc__key--eq {
+  --key-bg: var(--eq-bg);
+  --key-fg: var(--eq-fg);
+  --key-edge: var(--eq-edge);
+  font-size: 1.6rem;
+}
+
+.calc__key--wide {
+  grid-column: 1 / -1;
+}
+
+/* operador pendiente: la tecla se invierte */
+.calc__key--active {
+  --key-bg: #ffffff;
+  --key-fg: var(--op-bg);
+  outline: 3px solid var(--op-bg);
+  outline-offset: -3px;
+}
+
+.calc__key sup {
+  font-size: 0.62em;
+  line-height: 0;
+  margin-left: 1px;
+}
+
+.calc__key svg {
+  display: block;
+  margin: 0 auto;
+}
+
+@media (hover: hover) {
+  .calc__key:hover {
+    filter: brightness(0.96);
+  }
+}
+
+.calc__key:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--key-edge);
+}
+
+.calc__key:focus-visible {
+  outline: 3px solid var(--pino);
+  outline-offset: 3px;
+}
+
+@media (max-width: 360px) {
+  .calc { padding: 14px; border-radius: 28px; }
+  .calc__key { height: 56px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .calc__key { transition: none; }
+}
