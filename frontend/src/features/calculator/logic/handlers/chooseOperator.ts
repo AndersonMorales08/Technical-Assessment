@@ -1,10 +1,8 @@
 import { NEGATIVE_ZERO, ZERO } from "../constants";
 import { pendingExpression } from "../expression";
-import { toRaw } from "../format";
-import { failWith } from "../helpers";
-import { calculate } from "../math";
+import { requestCalculation, startOperation } from "../helpers";
 import type { Operator } from "../operators";
-import type { CalculationResult, CalculatorState } from "../types";
+import type { CalculatorState } from "../types";
 
 /** Tras estos operadores, "−" es el signo del segundo número (2 ^ −1). */
 const OPERATORS_ACCEPTING_SIGN: readonly Operator[] = ["*", "/", "^"];
@@ -22,32 +20,24 @@ const expectsSignedOperand = (state: CalculatorState, operator: Operator): boole
   state.operator !== null &&
   OPERATORS_ACCEPTING_SIGN.includes(state.operator);
 
-/** Resuelve la operación pendiente (si la hay) para poder encadenar la siguiente. */
-function resolveLeftOperand(state: CalculatorState): CalculationResult {
-  const typed = Number(state.current);
-  if (state.operator === null || state.previous === null) return { value: typed };
-
-  return calculate(state.previous, state.operator, typed);
-}
-
 function replaceOperator(state: CalculatorState, operator: Operator): CalculatorState {
   const left = state.previous ?? Number(state.current);
   return { ...state, operator, expression: pendingExpression(left, operator) };
 }
 
 function chainOperation(state: CalculatorState, operator: Operator): CalculatorState {
-  const left = resolveLeftOperand(state);
-  if ("error" in left) return failWith(left.error);
-
-  return {
-    ...state,
-    current: toRaw(left.value),
-    previous: left.value,
-    operator,
-    awaiting: true,
-    overwrite: true,
-    expression: pendingExpression(left.value, operator),
-  };
+  // Sin operación pendiente no hay nada que calcular todavía.
+  if (state.operator === null || state.previous === null) {
+    return startOperation(state, Number(state.current), operator);
+  }
+  // 2 + 3 × …: primero se resuelve 2 + 3 en el servidor.
+  return requestCalculation(state, {
+    kind: "chain",
+    operator: state.operator,
+    left: state.previous,
+    right: Number(state.current),
+    next: operator,
+  });
 }
 
 export function chooseOperator(state: CalculatorState, operator: Operator): CalculatorState {

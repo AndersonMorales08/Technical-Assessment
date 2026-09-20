@@ -1,4 +1,4 @@
-import { toRaw } from "../format";
+import { requestCalculation } from "../helpers";
 import type { Operator } from "../operators";
 import type { CalculatorState } from "../types";
 
@@ -8,14 +8,14 @@ const isAdditive = (operator: Operator | null): boolean =>
 /**
  * Como en una calculadora de bolsillo:
  * - "200 + 10 %" → 10 % *de 200* (= 20), y luego "=" da 220.
- * - En cualquier otro caso, divide entre 100.
+ * - En cualquier otro caso, el servidor divide entre 100 (`base` es null).
  */
 export function percentage(state: CalculatorState): CalculatorState {
-  const value = Number(state.current);
-  const result =
-    state.previous !== null && isAdditive(state.operator)
-      ? (state.previous * value) / 100
-      : value / 100;
+  const base = isAdditive(state.operator) ? state.previous : null;
 
-  return { ...state, current: toRaw(result), awaiting: false, overwrite: true };
+  return requestCalculation(state, {
+    kind: "percent",
+    value: Number(state.current),
+    base,
+  });
 }

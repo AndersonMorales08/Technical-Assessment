@@ -1,3 +1,4 @@
+import { classNames } from "../../../../shared/utils/classNames";
 import styles from "./Display.module.css";
 
 /** Cuanto más largo el texto, más pequeña la tipografía (de mayor a menor). */
@@ -16,14 +17,30 @@ interface DisplayProps {
   value: string;
   expression: string;
   hasError: boolean;
+  /** Esperando la respuesta del servidor. */
+  isLoading: boolean;
 }
 
-export function Display({ value, expression, hasError }: DisplayProps) {
+export function Display({ value, expression, hasError, isLoading }: DisplayProps) {
   return (
-    <div className={styles.display} role="status" aria-live="polite" aria-atomic="true">
+    <div
+      className={styles.display}
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+      aria-busy={isLoading}
+    >
       {/* El espacio no separable mantiene la altura cuando no hay expresión. */}
       <span className={styles.expression}>{expression || "\u00A0"}</span>
-      <span className={`${styles.value} ${getSizeClass(value, hasError) ?? ""}`}>{value}</span>
+      <span
+        className={classNames(
+          styles.value,
+          getSizeClass(value, hasError),
+          isLoading && styles.loading,
+        )}
+      >
+        {value}
+      </span>
     </div>
   );
 }

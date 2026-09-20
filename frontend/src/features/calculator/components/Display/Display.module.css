@@ -44,3 +44,9 @@
   white-space: normal;
   color: var(--calc-screen-error);
 }
+
+/* Esperando la respuesta del servidor */
+.loading {
+  opacity: 0.45;
+  transition: opacity 120ms ease-out;
+}

@@ -9,4 +9,5 @@ export const initialState: CalculatorState = {
   overwrite: false,
   expression: "",
   error: null,
+  pending: null,
 };
