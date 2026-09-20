@@ -1,3 +1,4 @@
+import { applyResult } from "./handlers/applyResult";
 import { chooseOperator } from "./handlers/chooseOperator";
 import { deleteLast } from "./handlers/deleteLast";
 import { evaluate } from "./handlers/evaluate";
@@ -5,6 +6,7 @@ import { inputDecimal } from "./handlers/inputDecimal";
 import { inputDigit } from "./handlers/inputDigit";
 import { percentage } from "./handlers/percentage";
 import { squareRoot } from "./handlers/squareRoot";
+import { failWith } from "./helpers";
 import { initialState } from "./initialState";
 import type { CalculatorAction, CalculatorState } from "./types";
 
@@ -16,7 +18,18 @@ export function calculatorReducer(
   state: CalculatorState,
   action: CalculatorAction,
 ): CalculatorState {
-  if (action.type === "clear") return initialState;
+  // Estas acciones siempre se atienden: AC cancela incluso un cálculo en curso.
+  switch (action.type) {
+    case "clear":
+      return initialState;
+    case "calculationSucceeded":
+      return applyResult(state, action.value);
+    case "calculationFailed":
+      // Sin cálculo en curso es una respuesta tardía: se ignora.
+      return state.pending ? failWith(action.message) : state;
+  }
+
+  if (state.pending) return state; // ocupada: espera la respuesta del servidor
   if (state.error && !recoversFromError(action)) return state;
 
   const base = state.error ? initialState : state;

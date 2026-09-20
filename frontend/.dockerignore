@@ -1,0 +1,23 @@
+node_modules
+dist
+build
+coverage
+.git
+.gitignore
+.vscode
+.idea
+.DS_Store
+*.log
+
+# Secretos y variables locales
+.env
+.env.*
+!.env.example
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Documentación / tests que no entran en el build
+README.md
